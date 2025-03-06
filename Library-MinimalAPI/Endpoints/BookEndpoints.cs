@@ -28,7 +28,7 @@ public static class BookEndpoints
             return Results.Ok(bookDTO);
         });
 
-        group.MapPut("", (BookService _service, [FromBody] ReadBookDTO bookDTO) =>
+        group.MapPut("", (BookService _service, [FromBody] UpdateBookDTO bookDTO) =>
         {
             var wasUpdated = _service.Update(bookDTO);
             if (wasUpdated) return Results.NoContent(); 

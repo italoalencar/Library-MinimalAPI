@@ -34,7 +34,7 @@ public class BookService
         return _mapper.Map<ReadBookDTO>(book);
     }
 
-    public bool Update(ReadBookDTO bookDTO)
+    public bool Update(UpdateBookDTO bookDTO)
     {
         var book = _mapper.Map<Book>(bookDTO);
         return dal.Update(book, b => b.Id == book.Id);

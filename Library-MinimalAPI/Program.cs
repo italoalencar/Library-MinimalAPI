@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<LibraryContext>(options =>
-    options.UseSqlServer(builder.Configuration["LibraryDB"]));
+    options.UseSqlServer(builder.Configuration["LibraryDB"])
+    .UseLazyLoadingProxies());
 
 builder.Services.AddScoped(typeof(DAL<>));
 
