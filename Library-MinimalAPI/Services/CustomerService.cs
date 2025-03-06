@@ -9,6 +9,7 @@ public class CustomerService
 {
     private readonly UserManager<Customer> _userManager;
     private readonly SignInManager<Customer> _signInManager;
+    private readonly TokenService tokenService;
     private readonly IMapper _mapper;
 
     public CustomerService(UserManager<Customer> userManager, IMapper mapper, SignInManager<Customer> signInManager)
@@ -24,14 +25,15 @@ public class CustomerService
         return await _userManager.CreateAsync(customer, customerDTO.Password);
     }
 
-    public async Task<Customer> LoginUser(LoginDTO login)
+    public async Task<string> LoginUser(LoginDTO login)
     {
         var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
         if (result.Succeeded)
         {
-            return _userManager.Users.FirstOrDefault(customer => customer
+            var user = _userManager.Users.FirstOrDefault(customer => customer
             .NormalizedUserName!
             .Equals(login.UserName.ToUpper()))!;
+            return tokenService.GenerateToken(user);
         }
         throw new ApplicationException("Login not successful.");
     }

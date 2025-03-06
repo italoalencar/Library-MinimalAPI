@@ -20,8 +20,8 @@ public static class CustomerEndpoints
 
         group.MapPost("login", async (CustomerService _service, LoginDTO login) =>
         {
-            var user = await _service.LoginUser(login);
-            return Results.Ok();
+            var token = await _service.LoginUser(login);
+            return Results.Ok(token);
         });
     }
 }
