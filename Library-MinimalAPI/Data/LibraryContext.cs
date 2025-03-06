@@ -1,9 +1,10 @@
 ﻿using Library_MinimalAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library_MinimalAPI.Data;
 
-public class LibraryContext : DbContext
+public class LibraryContext : IdentityDbContext<Customer>
 {
     public LibraryContext() { }
 
