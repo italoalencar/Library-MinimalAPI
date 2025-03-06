@@ -12,6 +12,7 @@ builder.Services.AddDbContext<LibraryContext>(options =>
 builder.Services.AddScoped(typeof(DAL<>));
 
 builder.Services.AddScoped<AuthorService>();
+builder.Services.AddScoped<BookService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -27,5 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.AddAuthorEndpoints();
+app.AddBookEndpoints();
 
 app.Run();

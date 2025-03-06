@@ -30,15 +30,11 @@ public class DAL<T> where T : class
 
     public bool Update(T updatedObject, Func<T, bool> condition)
     {
-        var objectExists = _context.Set<T>().Any(condition);
-        if (objectExists)
-        {
-            _context.Set<T>().Update(updatedObject);
-            _context.SaveChanges();
-            return true;
-        }
-        return false;
-        
+        var objectExists = _context.Set<T>().FirstOrDefault(condition);
+        if (objectExists is null) return false;
+        _context.Entry(objectExists).CurrentValues.SetValues(updatedObject);
+        _context.SaveChanges();
+        return true;    
     }
 
     public bool Delete(Func<T, bool> condition)
