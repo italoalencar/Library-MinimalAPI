@@ -9,4 +9,5 @@ public class Book
     public int? ReleaseYear {  get; set; }
 
     public virtual Author Author { get; set; }
+    public virtual ICollection<Loan>? Loans { get; set; }
 }

@@ -12,6 +12,7 @@ public class LibraryContext : IdentityDbContext<Customer>
 
     public virtual DbSet<Author> Authors { get; set; }
     public virtual DbSet<Book> Books { get; set; }
+    public virtual DbSet<Loan> Loans { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +30,19 @@ public class LibraryContext : IdentityDbContext<Customer>
             entity.HasOne(b => b.Author)
                 .WithMany(a => a.Books)
                 .HasForeignKey(b => b.AuthorId);
+        });
+
+        modelBuilder.Entity<Loan>(entity =>
+        {
+            entity.HasKey(l => l.Id);
+
+            entity.HasOne(l => l.Customer)
+                .WithMany(c => c.Loans)
+                .HasForeignKey(l => l.CustomerId);
+
+            entity.HasOne(l => l.Book)
+                .WithMany(b => b.Loans)
+                .HasForeignKey(l => l.BookId);
         });
     }
 }
