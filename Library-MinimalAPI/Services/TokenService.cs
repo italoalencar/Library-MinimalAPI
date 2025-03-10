@@ -17,7 +17,7 @@ public class TokenService
 
     public string GenerateToken(Customer customer)
     {
-        Claim[] claims = new Claim[]
+        Claim[] claims =
         {
             new Claim("id", customer.Id),
             new Claim("firstName", customer.FirstName),
@@ -25,14 +25,15 @@ public class TokenService
             new Claim("username", customer.NormalizedUserName!)
         };
 
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["SymmetricSecurityKey"])
-            );
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+             _config["SymmetricSecurityKeyLibrary"]));
 
-        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.Aes128CbcHmacSha256);
+
+        Console.WriteLine("@@@@@@@@@@@ chegou aqui, depois do algoritmo?");
 
         var token = new JwtSecurityToken(
-             expires: DateTime.Now.AddMinutes(10),
+            expires: DateTime.Now.AddMinutes(10),
             claims: claims,
             signingCredentials: signingCredentials
             );

@@ -21,6 +21,8 @@ builder.Services.AddScoped(typeof(DAL<>));
 builder.Services.AddScoped<AuthorService>();
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<TokenService>();
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
