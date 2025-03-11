@@ -3,8 +3,12 @@ using Library_MinimalAPI.Data;
 using Library_MinimalAPI.Endpoints;
 using Library_MinimalAPI.Models;
 using Library_MinimalAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +26,24 @@ builder.Services.AddScoped<AuthorService>();
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<LoanService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["SymmetricSecurityKeyLibrary"]!))
+        };
+    });
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -37,8 +58,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.AddAuthorEndpoints();
 app.AddBookEndpoints();
 app.AddCustomerEndpoints();
+app.AddLoanEndpoints();
 
 app.Run();

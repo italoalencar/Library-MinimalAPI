@@ -30,8 +30,6 @@ public class TokenService
 
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.Aes128CbcHmacSha256);
 
-        Console.WriteLine("@@@@@@@@@@@ chegou aqui, depois do algoritmo?");
-
         var token = new JwtSecurityToken(
             expires: DateTime.Now.AddMinutes(10),
             claims: claims,

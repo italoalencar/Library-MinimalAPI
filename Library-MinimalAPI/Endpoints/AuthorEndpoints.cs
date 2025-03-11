@@ -14,7 +14,7 @@ public static class AuthorEndpoints
         group.MapPost("", (AuthorService _service, [FromBody] CreateAuthorDTO authorDTO) =>
         {
             return Results.Ok(_service.Create(authorDTO));
-        });
+        }).RequireAuthorization("AdminOnly");
 
         group.MapGet("", (AuthorService _service) =>
         {
@@ -33,13 +33,13 @@ public static class AuthorEndpoints
             var wasUpdated = _service.Update(authorDTO);
             if (wasUpdated) return Results.NoContent();
             return Results.NotFound("Author not found.");
-        });
+        }).RequireAuthorization("AdminOnly");
 
         group.MapDelete("{id}", (AuthorService _service, int id) =>
         {
             var wasRemoved = _service.Delete(id);
             if (wasRemoved) return Results.NoContent();
             return Results.NotFound("Author not found.");
-        });
+        }).RequireAuthorization("AdminOnly");
     }
 }

@@ -28,6 +28,11 @@ public class DAL<T> where T : class
         return _context.Set<T>().FirstOrDefault(condition);
     }
 
+    public ICollection<T> ListBy(Func<T, bool> condition)
+    {
+        return _context.Set<T>().Where(condition).ToList();
+    }
+
     public bool Update(T updatedObject, Func<T, bool> condition)
     {
         var objectExists = _context.Set<T>().FirstOrDefault(condition);

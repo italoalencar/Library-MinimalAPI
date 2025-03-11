@@ -14,7 +14,7 @@ public static class BookEndpoints
         group.MapPost("", (BookService _service, [FromBody] CreateBookDTO bookDTO) =>
         {
             return Results.Ok(_service.Create(bookDTO));
-        });
+        }).RequireAuthorization("AdminOnly");
 
         group.MapGet("", (BookService _service) =>
         {
@@ -33,13 +33,13 @@ public static class BookEndpoints
             var wasUpdated = _service.Update(bookDTO);
             if (wasUpdated) return Results.NoContent(); 
             return Results.NotFound("Book not found.");
-        });
+        }).RequireAuthorization("AdminOnly");
 
         group.MapDelete("{id}", (BookService _service, int id) =>
         {
             var wasDeleted = _service.Delete(id);
             if (wasDeleted) return Results.NoContent();
             return Results.NotFound("Book not found.");
-        });
+        }).RequireAuthorization("AdminOnly");
     }
 }
