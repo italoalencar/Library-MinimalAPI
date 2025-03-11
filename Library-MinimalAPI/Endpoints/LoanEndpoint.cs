@@ -47,5 +47,12 @@ public static class LoanEndpoint
             
             return Results.Ok(loans);
         }).RequireAuthorization("AdminOnly");
+
+        group.MapPatch("{id}", (LoanService _service, [FromBody] UpdateLoanDTO loanDTO, int id) =>
+        {
+            var updated = _service.UpdateStatus(id, loanDTO);
+            if (updated) return Results.NoContent();
+            return Results.NotFound("Loan not found.");
+        }).RequireAuthorization("AdminOnly");
     }
 }

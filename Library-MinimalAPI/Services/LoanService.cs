@@ -2,7 +2,6 @@
 using Library_MinimalAPI.DAL;
 using Library_MinimalAPI.DTOs;
 using Library_MinimalAPI.Models;
-using System.Security.Claims;
 
 namespace Library_MinimalAPI.Services;
 
@@ -42,5 +41,14 @@ public class LoanService
     {
         var loans = dal.Read();
         return _mapper.Map<List<ReadLoanDTO>>(loans);
+    }
+
+    public bool UpdateStatus(int id, UpdateLoanDTO loanDTO)
+    {
+        var loan = dal.ReadBy(l => l.Id == id);
+        if (loan is null) return false;
+        loan.IsReturned = loanDTO.IsReturned;
+        loan.ReturnedDate = DateTime.UtcNow;
+        return dal.Update(loan, l => l.Id == id);
     }
 }
